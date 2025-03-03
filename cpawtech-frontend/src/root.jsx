@@ -1,5 +1,5 @@
-import { Links, Meta, Outlet, Scripts, ScrollRestoration } from "react-router";
-import "./root.css";
+import { Links, Meta, Outlet, Scripts, ScrollRestoration } from 'react-router'
+import './root.css'
 
 export function Layout({ children }) {
     return (
@@ -20,9 +20,9 @@ export function Layout({ children }) {
                 <Scripts />
             </body>
         </html>
-    );
+    )
 }
 
 export default function Root() {
-    return <Outlet />;
+    return <Outlet />
 }

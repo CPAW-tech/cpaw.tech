@@ -1,3 +1,3 @@
-import { route } from "@react-router/dev/routes";
+import { route } from '@react-router/dev/routes'
 
-export default [route("*?", "routes/catchall.jsx")];
+export default [route('*?', 'routes/catchall.jsx')]
