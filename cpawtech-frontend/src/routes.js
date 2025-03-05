@@ -1,3 +1,6 @@
 import { route } from '@react-router/dev/routes'
 
-export default [route('*?', 'routes/catchall.jsx')]
+export default [
+    route('/signup', 'routes/authentication/signup.jsx'),
+    route('*?', 'routes/catchall.jsx'),
+]
