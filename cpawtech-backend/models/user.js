@@ -1,13 +1,14 @@
 import mongoose from 'mongoose'
+import bcrypt from 'bcrypt'
 
 const userSchema = new mongoose.Schema(
     {
         name: {
-            first: {
+            fname: {
                 type: String,
                 required: true,
             },
-            last: {
+            lname: {
                 type: String,
                 required: true,
             },
@@ -34,7 +35,7 @@ const userSchema = new mongoose.Schema(
         virtuals: {
             fullname: {
                 get() {
-                    return `${this.name.first} ${this.name.last}`
+                    return `${this.name.fname} ${this.name.lname}`
                 },
             },
         },

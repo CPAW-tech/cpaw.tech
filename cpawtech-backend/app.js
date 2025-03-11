@@ -1,9 +1,12 @@
-const express = require('express')
+import express from 'express'
 const app = express()
 const port = 3000
 
-const bodyParser = require('body-parser')
-const { default: signup } = require('./routes/authentication/signup')
+import bodyParser from 'body-parser'
+import signup from './routes/authentication/signup.js'
+
+import cors from 'cors'
+app.use(cors())
 
 app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({ extended: true }))
@@ -13,7 +16,7 @@ app.get('/', (req, res) => {
 })
 
 app.post('/api/auth/signup', async (req, res) => {
-    let data = signup(req.body)
+    let data = await signup(req.body)
     res.json(JSON.stringify(data))
 })
 

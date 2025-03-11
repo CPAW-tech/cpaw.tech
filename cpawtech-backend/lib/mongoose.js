@@ -7,7 +7,7 @@ if (!MONGODB_URI) {
     throw new Error('Please define the MONGODB_URI in a .env file')
 }
 
-const isConnected = false
+let isConnected = false
 
 export default function connectDB() {
     if (isConnected) {
@@ -19,7 +19,7 @@ export default function connectDB() {
     })
 }
 
-mongoose.connect.on('connected', () => {
+mongoose.connection.on('connected', () => {
     isConnected = true
 })
 
