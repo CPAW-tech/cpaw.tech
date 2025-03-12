@@ -12,9 +12,6 @@ export default async function login(data) {
         return { ok: false, err: 'user not found' }
     }
 
-    console.log(data)
-    console.log(user)
-
     const match = await bcrypt.compare(data.password, user.password)
 
     if (match) {
