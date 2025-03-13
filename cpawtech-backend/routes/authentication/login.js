@@ -1,5 +1,6 @@
 import connectDB from '../../lib/mongoose.js'
 import User from '../../models/user.js'
+import { getJWT } from '../../lib/jwt.js'
 
 import bcrypt from 'bcrypt'
 
@@ -15,7 +16,8 @@ export default async function login(data) {
     const match = await bcrypt.compare(data.password, user.password)
 
     if (match) {
-        return { ok: true }
+        let token = await getJWT({ id: user._id })
+        return { ok: true, token }
     }
 
     return { ok: false, err: 'invalid password' }

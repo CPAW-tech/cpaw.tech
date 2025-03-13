@@ -52,10 +52,12 @@ export default function Login() {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify(user),
+            credentials: 'include', //allows cookies to be set
         })
 
-        const data = await res.json()
-        console.log(data)
+        // const data = await res.json()
+
+        console.log(res)
     }
 
     const handleUsernameChange = (e) => {
