@@ -48,16 +48,13 @@ export default function Login() {
                 }
             })
         }
-        const res = await fetch('http://localhost:3000/api/auth/login', {
+
+        await fetch('http://localhost:3000/api/auth/login', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify(user),
             credentials: 'include', //allows cookies to be set
         })
-
-        // const data = await res.json()
-
-        console.log(res)
     }
 
     const handleUsernameChange = (e) => {

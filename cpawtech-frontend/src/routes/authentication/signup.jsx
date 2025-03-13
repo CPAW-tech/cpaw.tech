@@ -57,16 +57,11 @@ export default function SignUp() {
             })
         }
 
-        /* const res = */
         await fetch('http://localhost:3000/api/auth/signup', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify(user),
         })
-
-        // const data = await res.json()
-        // TODO -> do I need returned data, if so handle here
-        // console.log(data)
     }
 
     return (
