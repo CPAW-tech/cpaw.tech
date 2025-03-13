@@ -12,7 +12,7 @@ async function getJWT(payload) {
         .setIssuedAt()
         .setIssuer(process.env.JWT_ISSUER)
         .setAudience(process.env.JWT_AUDIENCE)
-        .setExpirationTime(Date.now() + 3600000)
+        .setExpirationTime(3600000)
         .sign(secretKey)
     return token
 }
