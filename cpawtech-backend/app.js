@@ -39,7 +39,7 @@ app.post('/api/auth/signup', async (req, res) => {
     if (data.ok) {
         res.cookie('token', data.token, options)
 
-        res.send('cookie set')
+        res.send({ username: data.username, isNonProfit: data.isNonProfit })
     } else {
         res.send(data.err)
     }
@@ -58,7 +58,7 @@ app.post('/api/auth/login', async (req, res) => {
     if (data.ok) {
         res.cookie('token', data.token, options)
 
-        res.send('cookie set')
+        res.send({ username: data.username, isNonProfit: data.isNonProfit })
     } else {
         res.send(data.err)
     }

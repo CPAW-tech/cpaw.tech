@@ -1,5 +1,6 @@
 import { Links, Meta, Outlet, Scripts, ScrollRestoration } from 'react-router'
 import './root.css'
+import { UserProvider } from './context/user'
 
 export function Layout({ children }) {
     return (
@@ -15,7 +16,7 @@ export function Layout({ children }) {
                 <Links />
             </head>
             <body>
-                {children}
+                <UserProvider>{children}</UserProvider>
                 <ScrollRestoration />
                 <Scripts />
             </body>

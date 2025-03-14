@@ -9,7 +9,15 @@ export default async function signup(data) {
     try {
         let dbUser = await newUser.save()
         let token = await getJWT({ id: dbUser._id })
-        return { ok: true, token }
+
+        console.log(newUser)
+
+        return {
+            ok: true,
+            token,
+            username: newUser.username,
+            isNonProfit: newUser.isNonProfit,
+        }
     } catch (e) {
         return { ok: false, err: e }
     }
