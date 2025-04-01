@@ -1,6 +1,11 @@
 import { object, string, boolean } from 'yup'
+import { useUserDispatch } from '../../context/user'
+import { useNavigate } from 'react-router'
 
 export default function SignUp() {
+    const userDispatch = useUserDispatch()
+    let navigate = useNavigate()
+
     const handleSubmit = async (e) => {
         e.preventDefault()
 
@@ -57,11 +62,25 @@ export default function SignUp() {
             })
         }
 
-        await fetch('http://localhost:3000/api/auth/signup', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(user),
+        let signedupUser = await fetch(
+            'http://localhost:3000/api/auth/signup',
+            {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(user),
+            }
+        )
+
+        let jsonUser = await signedupUser.json()
+
+        userDispatch({
+            type: 'refresh',
+            username: jsonUser.username,
+            isNonProfit: jsonUser.isNonProfit,
+            exp: Date.now() + 1200000,
         })
+
+        navigate('/dashboard')
     }
 
     return (

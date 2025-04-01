@@ -17,7 +17,12 @@ export default async function login(data) {
 
     if (match) {
         let token = await getJWT({ id: user._id })
-        return { ok: true, token }
+        return {
+            ok: true,
+            token,
+            username: user.username,
+            isNonProfit: user.isNonProfit,
+        }
     }
 
     return { ok: false, err: 'invalid password' }

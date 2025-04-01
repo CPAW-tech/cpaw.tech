@@ -1,5 +1,7 @@
 import { object, string } from 'yup'
 import { useReducer } from 'react'
+import { useUserDispatch } from '../../context/user'
+import { useNavigate } from 'react-router'
 
 function reducer(state, action) {
     switch (action.type) {
@@ -22,6 +24,8 @@ const initialState = { username: '', password: '' }
 
 export default function Login() {
     const [state, dispatch] = useReducer(reducer, initialState)
+    const userDispatch = useUserDispatch()
+    let navigate = useNavigate()
 
     const handleSubmit = async () => {
         let userSchema = object({
@@ -49,12 +53,23 @@ export default function Login() {
             })
         }
 
-        await fetch('http://localhost:3000/api/auth/login', {
+        let logedinUser = await fetch('http://localhost:3000/api/auth/login', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify(user),
             credentials: 'include', //allows cookies to be set
         })
+
+        let jsonUser = await logedinUser.json()
+
+        userDispatch({
+            type: 'refresh',
+            username: jsonUser.username,
+            isNonProfit: jsonUser.isNonProfit,
+            exp: Date.now() + 1200000,
+        })
+
+        navigate('/dashboard')
     }
 
     const handleUsernameChange = (e) => {
