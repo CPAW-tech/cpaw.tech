@@ -1,58 +1,29 @@
 import { object, string, boolean } from 'yup'
-import { useUserDispatch } from '../../context/user'
 import { useNavigate } from 'react-router'
+import { useAtom } from 'jotai'
 
-import { createFieldAtom } from '../../atoms/formAtoms'
-import { atom, useAtom } from 'jotai'
-
-const formDataAtom = atom({
-    fname: '',
-    lname: '',
-    username: '',
-    email: '',
-    password: '',
-    isNonProfit: false,
-})
+import {
+    formDataAtom,
+    firstnameAtom,
+    lastnameAtom,
+    usernameAtom,
+    emailAtom,
+    passwordAtom,
+    isNonProfitAtom,
+} from '../../atoms/signupAtoms'
 
 export default function SignUp() {
-    const userDispatch = useUserDispatch()
     let navigate = useNavigate()
 
-    const [formData, createFieldAtom] = useAtom(formDataAtom)
-    const [firstname, setFirstname] = useAtom(
-        createFieldAtom(formDataAtom, 'fname')
-    )
-    const [lastname, setLastname] = useAtom(
-        createFieldAtom(formDataAtom, 'lname')
-    )
-    const [username, setUsername] = useAtom(
-        createFieldAtom(formDataAtom, 'username')
-    )
-    const [email, setEmail] = useAtom(createFieldAtom(formDataAtom, 'email'))
-    const [password, setPassword] = useAtom(
-        createFieldAtom(formDataAtom, 'password')
-    )
-    const [isNonProfit, setIsNonProfit] = useAtom(
-        createFieldAtom(formDataAtom, 'isNonProfit')
-    )
+    const [formData] = useAtom(formDataAtom)
+    const [firstname, setFirstname] = useAtom(firstnameAtom)
+    const [lastname, setLastname] = useAtom(lastnameAtom)
+    const [username, setUsername] = useAtom(usernameAtom)
+    const [email, setEmail] = useAtom(emailAtom)
+    const [password, setPassword] = useAtom(passwordAtom)
+    const [isNonProfit, setIsNonProfit] = useAtom(isNonProfitAtom)
 
-    const handleSubmit = async (e) => {
-        e.preventDefault()
-
-        const formData = new FormData(e.target)
-        const formDataJson = Object.fromEntries(formData)
-
-        const remixedData = {
-            name: {
-                fname: formDataJson.fname,
-                lname: formDataJson.lname,
-            },
-            username: formDataJson.username,
-            email: formDataJson.email,
-            password: formDataJson.password,
-            isNonProfit: formDataJson.isNonProfit == 'Student' ? false : true,
-        }
-
+    const handleSubmit = async () => {
         let userSchema = object({
             name: object({
                 fname: string()
@@ -79,7 +50,7 @@ export default function SignUp() {
         let user
 
         try {
-            user = await userSchema.validate(remixedData, { abortEarly: false })
+            user = await userSchema.validate(formData, { abortEarly: false })
         } catch (e) {
             let errors = {}
 
@@ -92,23 +63,15 @@ export default function SignUp() {
             })
         }
 
-        let signedupUser = await fetch(
-            'http://localhost:3000/api/auth/signup',
-            {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(user),
-            }
-        )
-
-        let jsonUser = await signedupUser.json()
-
-        userDispatch({
-            type: 'refresh',
-            username: jsonUser.username,
-            isNonProfit: jsonUser.isNonProfit,
-            exp: Date.now() + 1200000,
+        // TODO: catch errors and set up a user context style thing with jotai
+        // let signedupUser =
+        await fetch('http://localhost:3000/api/auth/signup', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(user),
         })
+
+        // let jsonUser = await signedupUser.json()
 
         navigate('/dashboard')
     }
@@ -116,10 +79,7 @@ export default function SignUp() {
     return (
         <>
             <div>
-                <form
-                    className="flex flex-col w-[30vw]"
-                    onSubmit={handleSubmit}
-                >
+                <form className="flex flex-col w-[30vw]" action={handleSubmit}>
                     <label htmlFor="fname">First Name:</label>
                     <input
                         className="border box-border border-black"
@@ -189,7 +149,10 @@ export default function SignUp() {
                                 name="isNonProfit"
                                 value="Non Profit"
                                 checked={isNonProfit}
-                                onChange={() => setIsNonProfit(true)}
+                                onChange={() => {
+                                    console.log('A')
+                                    setIsNonProfit(true)
+                                }}
                             />
                             <label htmlFor="nonprofit">Non Profit</label>
                         </div>

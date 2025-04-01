@@ -18,7 +18,6 @@ export default function Login() {
     const navigate = useNavigate()
 
     const handleSubmit = async () => {
-        console.log('insubmit')
         let userSchema = object({
             username: string().required().min(1).max(100).trim(),
             password: string()
