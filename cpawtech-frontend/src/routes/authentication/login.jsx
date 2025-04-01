@@ -1,33 +1,24 @@
 import { object, string } from 'yup'
-import { useReducer } from 'react'
-import { useUserDispatch } from '../../context/user'
 import { useNavigate } from 'react-router'
+import { atom, useAtom } from 'jotai'
 
-function reducer(state, action) {
-    switch (action.type) {
-        case 'changed_username':
-            return {
-                username: action.nextUsername,
-                password: state.password,
-            }
-        case 'changed_password':
-            return {
-                username: state.username,
-                password: action.nextPassword,
-            }
-        default:
-            throw Error('unknown dispatch command on login form')
-    }
-}
+const usernameAtom = atom('')
+const passwordAtom = atom('')
 
-const initialState = { username: '', password: '' }
+// utility read atom for future potential form data complexities
+const formDataAtom = atom((get) => {
+    return { username: get(usernameAtom), password: get(passwordAtom) }
+})
 
 export default function Login() {
-    const [state, dispatch] = useReducer(reducer, initialState)
-    const userDispatch = useUserDispatch()
-    let navigate = useNavigate()
+    const [username, changeUsername] = useAtom(usernameAtom)
+    const [password, changePassword] = useAtom(passwordAtom)
+    const [formData] = useAtom(formDataAtom)
+
+    const navigate = useNavigate()
 
     const handleSubmit = async () => {
+        console.log('insubmit')
         let userSchema = object({
             username: string().required().min(1).max(100).trim(),
             password: string()
@@ -40,7 +31,7 @@ export default function Login() {
         let user
 
         try {
-            user = await userSchema.validate(state, { abortEarly: false })
+            user = await userSchema.validate(formData, { abortEarly: false })
         } catch (e) {
             let errors = {}
 
@@ -53,62 +44,45 @@ export default function Login() {
             })
         }
 
-        let logedinUser = await fetch('http://localhost:3000/api/auth/login', {
+        // TODO: catch errors and set up a user context style thing with jotai
+        // let logedinUser =
+        await fetch('http://localhost:3000/api/auth/login', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify(user),
             credentials: 'include', //allows cookies to be set
+        }).catch((e) => {
+            console.error(e)
         })
 
-        let jsonUser = await logedinUser.json()
-
-        userDispatch({
-            type: 'refresh',
-            username: jsonUser.username,
-            isNonProfit: jsonUser.isNonProfit,
-            exp: Date.now() + 1200000,
-        })
+        // let jsonUser = await logedinUser.json()
 
         navigate('/dashboard')
-    }
-
-    const handleUsernameChange = (e) => {
-        dispatch({
-            type: 'changed_username',
-            nextUsername: e.target.value,
-        })
-    }
-
-    const handlePasswordChange = (e) => {
-        dispatch({
-            type: 'changed_password',
-            nextPassword: e.target.value,
-        })
     }
 
     return (
         <>
             <div>
                 <form className="flex flex-col w-[30vw]" action={handleSubmit}>
-                    <label for="username">Username:</label>
+                    <label htmlFor="username">Username:</label>
                     <input
                         className="border box-border border-black"
                         type="text"
                         id="username"
                         name="username"
                         placeholder="john.smith"
-                        value={state.username}
-                        onChange={handleUsernameChange}
+                        value={username}
+                        onChange={(e) => changeUsername(e.target.value)}
                     />
-                    <label for="password">Password:</label>
+                    <label htmlFor="password">Password:</label>
                     <input
                         className="border box-border border-black"
                         type="password"
                         id="password"
                         name="password"
                         placeholder="password123!"
-                        value={state.password}
-                        onChange={handlePasswordChange}
+                        value={password}
+                        onChange={(e) => changePassword(e.target.value)}
                     />
                     <button type="submit">Submit</button>
                 </form>

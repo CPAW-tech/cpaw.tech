@@ -60,7 +60,7 @@ app.post('/api/auth/login', async (req, res) => {
 
         res.send({ username: data.username, isNonProfit: data.isNonProfit })
     } else {
-        res.send(data.err)
+        res.send({ err: data.err })
     }
 })
 

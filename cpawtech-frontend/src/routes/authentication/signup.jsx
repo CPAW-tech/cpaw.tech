@@ -2,9 +2,39 @@ import { object, string, boolean } from 'yup'
 import { useUserDispatch } from '../../context/user'
 import { useNavigate } from 'react-router'
 
+import { createFieldAtom } from '../../atoms/formAtoms'
+import { atom, useAtom } from 'jotai'
+
+const formDataAtom = atom({
+    fname: '',
+    lname: '',
+    username: '',
+    email: '',
+    password: '',
+    isNonProfit: false,
+})
+
 export default function SignUp() {
     const userDispatch = useUserDispatch()
     let navigate = useNavigate()
+
+    const [formData, createFieldAtom] = useAtom(formDataAtom)
+    const [firstname, setFirstname] = useAtom(
+        createFieldAtom(formDataAtom, 'fname')
+    )
+    const [lastname, setLastname] = useAtom(
+        createFieldAtom(formDataAtom, 'lname')
+    )
+    const [username, setUsername] = useAtom(
+        createFieldAtom(formDataAtom, 'username')
+    )
+    const [email, setEmail] = useAtom(createFieldAtom(formDataAtom, 'email'))
+    const [password, setPassword] = useAtom(
+        createFieldAtom(formDataAtom, 'password')
+    )
+    const [isNonProfit, setIsNonProfit] = useAtom(
+        createFieldAtom(formDataAtom, 'isNonProfit')
+    )
 
     const handleSubmit = async (e) => {
         e.preventDefault()
@@ -90,45 +120,55 @@ export default function SignUp() {
                     className="flex flex-col w-[30vw]"
                     onSubmit={handleSubmit}
                 >
-                    <label for="fname">First Name:</label>
+                    <label htmlFor="fname">First Name:</label>
                     <input
                         className="border box-border border-black"
                         type="text"
                         id="fname"
                         name="fname"
                         placeholder="John"
+                        value={firstname}
+                        onChange={(e) => setFirstname(e.target.value)}
                     />
-                    <label for="lname">Last Name:</label>
+                    <label htmlFor="lname">Last Name:</label>
                     <input
                         className="border box-border border-black"
                         type="text"
                         id="lname"
                         name="lname"
                         placeholder="Smith"
+                        value={lastname}
+                        onChange={(e) => setLastname(e.target.value)}
                     />
-                    <label for="username">Username:</label>
+                    <label htmlFor="username">Username:</label>
                     <input
                         className="border box-border border-black"
                         type="text"
                         id="username"
                         name="username"
                         placeholder="john.smith"
+                        value={username}
+                        onChange={(e) => setUsername(e.target.value)}
                     />
-                    <label for="email">Email:</label>
+                    <label htmlFor="email">Email:</label>
                     <input
                         className="border box-border border-black"
                         type="email"
                         id="email"
                         name="email"
                         placeholder="john.smith@gmail.com"
+                        value={email}
+                        onChange={(e) => setEmail(e.target.value)}
                     />
-                    <label for="password">Password:</label>
+                    <label htmlFor="password">Password:</label>
                     <input
                         className="border box-border border-black"
                         type="password"
                         id="password"
                         name="password"
                         placeholder="password123!"
+                        value={password}
+                        onChange={(e) => setPassword(e.target.value)}
                     />
                     <div className="flex flex-row justify-around">
                         <div>
@@ -137,8 +177,10 @@ export default function SignUp() {
                                 id="student"
                                 name="isNonProfit"
                                 value="Student"
+                                checked={!isNonProfit}
+                                onChange={() => setIsNonProfit(false)}
                             />
-                            <label for="student">Student</label>
+                            <label htmlFor="student">Student</label>
                         </div>
                         <div>
                             <input
@@ -146,8 +188,10 @@ export default function SignUp() {
                                 id="nonprofit"
                                 name="isNonProfit"
                                 value="Non Profit"
+                                checked={isNonProfit}
+                                onChange={() => setIsNonProfit(true)}
                             />
-                            <label for="nonprofit">Non Profit</label>
+                            <label htmlFor="nonprofit">Non Profit</label>
                         </div>
                     </div>
                     <button type="submit">Submit</button>
