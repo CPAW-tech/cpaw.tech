@@ -85,7 +85,6 @@ export default function SignUp() {
                         className="border box-border border-black"
                         type="text"
                         id="fname"
-                        name="fname"
                         placeholder="John"
                         value={firstname}
                         onChange={(e) => setFirstname(e.target.value)}
@@ -95,7 +94,6 @@ export default function SignUp() {
                         className="border box-border border-black"
                         type="text"
                         id="lname"
-                        name="lname"
                         placeholder="Smith"
                         value={lastname}
                         onChange={(e) => setLastname(e.target.value)}
@@ -105,7 +103,6 @@ export default function SignUp() {
                         className="border box-border border-black"
                         type="text"
                         id="username"
-                        name="username"
                         placeholder="john.smith"
                         value={username}
                         onChange={(e) => setUsername(e.target.value)}
@@ -115,7 +112,6 @@ export default function SignUp() {
                         className="border box-border border-black"
                         type="email"
                         id="email"
-                        name="email"
                         placeholder="john.smith@gmail.com"
                         value={email}
                         onChange={(e) => setEmail(e.target.value)}
@@ -125,7 +121,6 @@ export default function SignUp() {
                         className="border box-border border-black"
                         type="password"
                         id="password"
-                        name="password"
                         placeholder="password123!"
                         value={password}
                         onChange={(e) => setPassword(e.target.value)}
@@ -135,8 +130,6 @@ export default function SignUp() {
                             <input
                                 type="radio"
                                 id="student"
-                                name="isNonProfit"
-                                value="Student"
                                 checked={!isNonProfit}
                                 onChange={() => setIsNonProfit(false)}
                             />
@@ -146,8 +139,6 @@ export default function SignUp() {
                             <input
                                 type="radio"
                                 id="nonprofit"
-                                name="isNonProfit"
-                                value="Non Profit"
                                 checked={isNonProfit}
                                 onChange={() => setIsNonProfit(true)}
                             />
