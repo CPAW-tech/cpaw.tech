@@ -149,10 +149,7 @@ export default function SignUp() {
                                 name="isNonProfit"
                                 value="Non Profit"
                                 checked={isNonProfit}
-                                onChange={() => {
-                                    console.log('A')
-                                    setIsNonProfit(true)
-                                }}
+                                onChange={() => setIsNonProfit(true)}
                             />
                             <label htmlFor="nonprofit">Non Profit</label>
                         </div>

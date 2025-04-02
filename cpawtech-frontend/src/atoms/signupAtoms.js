@@ -13,66 +13,68 @@ export const formDataAtom = atom({
 
 export const firstnameAtom = atom(
     (get) => {
-        get(formDataAtom).name.fname
+        return get(formDataAtom).name.fname
     },
     (get, set, value) => {
-        let newFormData = get(formDataAtom)
-        newFormData.name.fname = value
-        set(formDataAtom, newFormData)
+        let formData = get(formDataAtom)
+        const updatedFormData = {
+            ...formData,
+            name: { ...formData.name, fname: value },
+        }
+        set(formDataAtom, updatedFormData)
     }
 )
 
 export const lastnameAtom = atom(
     (get) => {
-        get(formDataAtom).name.lname
+        return get(formDataAtom).name.lname
     },
     (get, set, value) => {
-        let newFormData = get(formDataAtom)
-        newFormData.name.lname = value
-        set(formDataAtom, newFormData)
+        let formData = get(formDataAtom)
+        const updatedFormData = {
+            ...formData,
+            name: { ...formData.name, lname: value },
+        }
+        set(formDataAtom, updatedFormData)
     }
 )
 
 export const usernameAtom = atom(
     (get) => {
-        get(formDataAtom).username
+        return get(formDataAtom).username
     },
     (get, set, value) => {
-        let newFormData = get(formDataAtom)
-        newFormData.username = value
-        set(formDataAtom, newFormData)
+        const updatedFormData = { ...get(formDataAtom), username: value }
+        set(formDataAtom, updatedFormData)
     }
 )
 
 export const emailAtom = atom(
     (get) => {
-        get(formDataAtom).email
+        return get(formDataAtom).email
     },
     (get, set, value) => {
-        let newFormData = get(formDataAtom)
-        newFormData.email = value
-        set(formDataAtom, newFormData)
+        const updatedFormData = { ...get(formDataAtom), email: value }
+        set(formDataAtom, updatedFormData)
     }
 )
 
 export const passwordAtom = atom(
     (get) => {
-        get(formDataAtom).password
+        return get(formDataAtom).password
     },
     (get, set, value) => {
-        let newFormData = get(formDataAtom)
-        newFormData.password = value
-        set(formDataAtom, newFormData)
+        const updatedFormData = { ...get(formDataAtom), password: value }
+        set(formDataAtom, updatedFormData)
     }
 )
 
 export const isNonProfitAtom = atom(
     (get) => {
-        get(formDataAtom).isNonProfit
+        return get(formDataAtom).isNonProfit
     },
     (get, set, value) => {
-        let newFormData = get(formDataAtom)
-        newFormData.isNonProfit = value
-        set(formDataAtom, newFormData)
+        const updatedFormData = { ...get(formDataAtom), isNonProfit: value }
+        set(formDataAtom, updatedFormData)
     }
 )
