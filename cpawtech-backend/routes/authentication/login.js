@@ -8,10 +8,12 @@ export default async function login(data) {
     await connectDB()
 
     let user = await User.findOne({ username: data.username }).exec()
-    if (user.length == 0) {
+    if (user == null || user.length == 0) {
         console.log('oops')
         return { ok: false, err: 'user not found' }
     }
+
+    console.log('valid')
 
     const match = await bcrypt.compare(data.password, user.password)
 
