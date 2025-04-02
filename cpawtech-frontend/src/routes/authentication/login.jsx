@@ -1,6 +1,7 @@
 import { object, string } from 'yup'
 import { useNavigate } from 'react-router'
-import { atom, useAtom } from 'jotai'
+import { atom, useAtom, useSetAtom } from 'jotai'
+import { userAuthAtom } from '../../atoms/userContextAtoms'
 
 const usernameAtom = atom('')
 const passwordAtom = atom('')
@@ -14,6 +15,7 @@ export default function Login() {
     const [username, changeUsername] = useAtom(usernameAtom)
     const [password, changePassword] = useAtom(passwordAtom)
     const [formData] = useAtom(formDataAtom)
+    const setUser = useSetAtom(userAuthAtom)
 
     const navigate = useNavigate()
 
@@ -44,8 +46,7 @@ export default function Login() {
         }
 
         // TODO: catch errors and set up a user context style thing with jotai
-        // let logedinUser =
-        await fetch('http://localhost:3000/api/auth/login', {
+        let logedinUser = await fetch('http://localhost:3000/api/auth/login', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify(user),
@@ -54,7 +55,9 @@ export default function Login() {
             console.error(e)
         })
 
-        // let jsonUser = await logedinUser.json()
+        let jsonUser = await logedinUser.json()
+
+        setUser(jsonUser)
 
         navigate('/dashboard')
     }

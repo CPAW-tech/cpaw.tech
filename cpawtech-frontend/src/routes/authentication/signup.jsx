@@ -1,6 +1,6 @@
 import { object, string, boolean } from 'yup'
 import { useNavigate } from 'react-router'
-import { useAtom } from 'jotai'
+import { useAtom, useSetAtom } from 'jotai'
 
 import {
     formDataAtom,
@@ -11,6 +11,7 @@ import {
     passwordAtom,
     isNonProfitAtom,
 } from '../../atoms/signupAtoms'
+import { userAuthAtom } from '../../atoms/userContextAtoms'
 
 export default function SignUp() {
     let navigate = useNavigate()
@@ -22,6 +23,8 @@ export default function SignUp() {
     const [email, setEmail] = useAtom(emailAtom)
     const [password, setPassword] = useAtom(passwordAtom)
     const [isNonProfit, setIsNonProfit] = useAtom(isNonProfitAtom)
+
+    const setUser = useSetAtom(userAuthAtom)
 
     const handleSubmit = async () => {
         let userSchema = object({
@@ -64,14 +67,18 @@ export default function SignUp() {
         }
 
         // TODO: catch errors and set up a user context style thing with jotai
-        // let signedupUser =
-        await fetch('http://localhost:3000/api/auth/signup', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(user),
-        })
+        let signedupUser = await fetch(
+            'http://localhost:3000/api/auth/signup',
+            {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(user),
+            }
+        )
 
-        // let jsonUser = await signedupUser.json()
+        let jsonUser = await signedupUser.json()
+
+        setUser(jsonUser)
 
         navigate('/dashboard')
     }
