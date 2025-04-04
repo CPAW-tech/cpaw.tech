@@ -1,17 +1,28 @@
-import { useAtom } from 'jotai'
+import { atom, useAtom } from 'jotai'
 import { isUserAuthenticatedAtom } from '../../atoms/userContextAtoms'
 import { useNavigate } from 'react-router'
 import { useEffect } from 'react'
+import { Outlet } from 'react-router'
 
-export default function SecureBoundary({ children }) {
+const loadingAtom = atom(true)
+
+export default function SecureBoundary() {
     const [isUserAuthenticated] = useAtom(isUserAuthenticatedAtom)
+    const [loading, setLoading] = useAtom(loadingAtom)
+
     let navigate = useNavigate()
 
     useEffect(() => {
         if (!isUserAuthenticated) {
             navigate('/login')
+        } else {
+            setLoading(false)
         }
-    }, [isUserAuthenticated, navigate])
+    }, [isUserAuthenticated, navigate, setLoading])
 
-    return <>{children}</>
+    if (loading) {
+        return <></>
+    } else {
+        return <Outlet />
+    }
 }
