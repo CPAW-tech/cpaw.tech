@@ -1,7 +1,7 @@
 import { object, string } from 'yup'
 import { useNavigate } from 'react-router'
 import { atom, useAtom, useSetAtom } from 'jotai'
-import { userAuthAtom } from '../../atoms/userContextAtoms'
+import { setUserAuthAtom } from '../../atoms/userContextAtoms'
 
 const usernameAtom = atom('')
 const passwordAtom = atom('')
@@ -15,7 +15,7 @@ export default function Login() {
     const [username, changeUsername] = useAtom(usernameAtom)
     const [password, changePassword] = useAtom(passwordAtom)
     const [formData] = useAtom(formDataAtom)
-    const setUser = useSetAtom(userAuthAtom)
+    const setUser = useSetAtom(setUserAuthAtom)
 
     const navigate = useNavigate()
 
@@ -56,6 +56,8 @@ export default function Login() {
         })
 
         let jsonUser = await logedinUser.json()
+
+        console.log(jsonUser)
 
         setUser(jsonUser)
 

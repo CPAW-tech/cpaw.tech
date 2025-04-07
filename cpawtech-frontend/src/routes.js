@@ -1,7 +1,8 @@
-import { route, layout } from '@react-router/dev/routes'
+import { route, layout, index } from '@react-router/dev/routes'
 
 export default [
-    route('/signup', 'routes/authentication/signup.jsx'),
+    index('routes/landing.jsx'),
+    route('/signup/:type?', 'routes/authentication/signup.jsx'),
     route('/login', 'routes/authentication/login.jsx'),
 
     layout('routes/secure/SecureBoundary.jsx', [

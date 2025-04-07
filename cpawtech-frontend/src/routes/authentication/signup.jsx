@@ -1,5 +1,5 @@
 import { object, string, boolean } from 'yup'
-import { useNavigate } from 'react-router'
+import { useNavigate, useParams } from 'react-router'
 import { useAtom, useSetAtom } from 'jotai'
 
 import {
@@ -12,8 +12,10 @@ import {
     isNonProfitAtom,
 } from '../../atoms/signupAtoms'
 import { userAuthAtom } from '../../atoms/userContextAtoms'
+import { useEffect } from 'react'
 
 export default function SignUp() {
+    let { type } = useParams()
     let navigate = useNavigate()
 
     const [formData] = useAtom(formDataAtom)
@@ -25,6 +27,17 @@ export default function SignUp() {
     const [isNonProfit, setIsNonProfit] = useAtom(isNonProfitAtom)
 
     const setUser = useSetAtom(userAuthAtom)
+
+    useEffect(() => {
+        switch (type) {
+            case 'nonprofit':
+                setIsNonProfit(true)
+                break
+            default:
+                setIsNonProfit(false)
+                break
+        }
+    }, [type, setIsNonProfit])
 
     const handleSubmit = async () => {
         let userSchema = object({
