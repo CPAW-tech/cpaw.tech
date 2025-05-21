@@ -5,9 +5,13 @@ export function NavBar() {
     return (
         <div className={'navbar card'}>
             <div className="linker">
-                <h1 className={'navelem'}>
+                <Link
+                    to={{ pathname: '/' }}
+                    prefetch="intent"
+                    className={'navelem card'}
+                >
                     <strong>CPAW.TECH</strong>
-                </h1>
+                </Link>
                 <nav className={'linksbar'}>
                     <Link
                         to={{ pathname: '/about' }}
