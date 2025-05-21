@@ -10,6 +10,8 @@ export default function SecureBoundary() {
     const [isUserAuthenticated] = useAtom(isUserAuthenticatedAtom)
     const [loading, setLoading] = useAtom(loadingAtom)
 
+    console.log('Secure')
+
     let navigate = useNavigate()
 
     useEffect(() => {

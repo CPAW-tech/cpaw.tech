@@ -1,5 +1,5 @@
 import { object, string, boolean } from 'yup'
-import { useNavigate } from 'react-router'
+import { useNavigate, useParams } from 'react-router'
 import { useAtom, useSetAtom } from 'jotai'
 
 import {
@@ -12,8 +12,10 @@ import {
     isNonProfitAtom,
 } from '../../atoms/signupAtoms'
 import { userAuthAtom } from '../../atoms/userContextAtoms'
+import { useEffect } from 'react'
 
 export default function SignUp() {
+    let { type } = useParams()
     let navigate = useNavigate()
 
     const [formData] = useAtom(formDataAtom)
@@ -25,6 +27,17 @@ export default function SignUp() {
     const [isNonProfit, setIsNonProfit] = useAtom(isNonProfitAtom)
 
     const setUser = useSetAtom(userAuthAtom)
+
+    useEffect(() => {
+        switch (type) {
+            case 'nonprofit':
+                setIsNonProfit(true)
+                break
+            default:
+                setIsNonProfit(false)
+                break
+        }
+    }, [type, setIsNonProfit])
 
     const handleSubmit = async () => {
         let userSchema = object({
@@ -83,76 +96,106 @@ export default function SignUp() {
         navigate('/dashboard')
     }
 
+    //TODO: find a way to reuse styles. consider refactor into loop
     return (
         <>
-            <div>
-                <form className="flex flex-col w-[30vw]" action={handleSubmit}>
-                    <label htmlFor="fname">First Name:</label>
-                    <input
-                        className="border box-border border-black"
-                        type="text"
-                        id="fname"
-                        placeholder="John"
-                        value={firstname}
-                        onChange={(e) => setFirstname(e.target.value)}
-                    />
-                    <label htmlFor="lname">Last Name:</label>
-                    <input
-                        className="border box-border border-black"
-                        type="text"
-                        id="lname"
-                        placeholder="Smith"
-                        value={lastname}
-                        onChange={(e) => setLastname(e.target.value)}
-                    />
-                    <label htmlFor="username">Username:</label>
-                    <input
-                        className="border box-border border-black"
-                        type="text"
-                        id="username"
-                        placeholder="john.smith"
-                        value={username}
-                        onChange={(e) => setUsername(e.target.value)}
-                    />
-                    <label htmlFor="email">Email:</label>
-                    <input
-                        className="border box-border border-black"
-                        type="email"
-                        id="email"
-                        placeholder="john.smith@gmail.com"
-                        value={email}
-                        onChange={(e) => setEmail(e.target.value)}
-                    />
-                    <label htmlFor="password">Password:</label>
-                    <input
-                        className="border box-border border-black"
-                        type="password"
-                        id="password"
-                        placeholder="password123!"
-                        value={password}
-                        onChange={(e) => setPassword(e.target.value)}
-                    />
+            <div className="flex flex-row justify-around items-center">
+                <form
+                    className="flex flex-col w-[30vw] gap-1"
+                    action={handleSubmit}
+                >
+                    <div className="flex flex-col">
+                        <label htmlFor="fname" className="font-bold">
+                            First Name:
+                        </label>
+                        <input
+                            className="border box-border border-black rounded p-1"
+                            type="text"
+                            id="fname"
+                            placeholder="John"
+                            value={firstname}
+                            onChange={(e) => setFirstname(e.target.value)}
+                        />
+                    </div>
+                    <div className="flex flex-col">
+                        <label htmlFor="lname" className="font-bold">
+                            Last Name:
+                        </label>
+                        <input
+                            className="border box-border border-black rounded p-1"
+                            type="text"
+                            id="lname"
+                            placeholder="Smith"
+                            value={lastname}
+                            onChange={(e) => setLastname(e.target.value)}
+                        />
+                    </div>
+                    <div className="flex flex-col">
+                        <label htmlFor="username" className="font-bold">
+                            Username:
+                        </label>
+                        <input
+                            className="border box-border border-black rounded p-1"
+                            type="text"
+                            id="username"
+                            placeholder="john.smith"
+                            value={username}
+                            onChange={(e) => setUsername(e.target.value)}
+                        />
+                    </div>
+                    <div className="flex flex-col">
+                        <label htmlFor="email" className="font-bold">
+                            Email:
+                        </label>
+                        <input
+                            className="border box-border border-black rounded p-1"
+                            type="email"
+                            id="email"
+                            placeholder="john.smith@gmail.com"
+                            value={email}
+                            onChange={(e) => setEmail(e.target.value)}
+                        />
+                    </div>
+                    <div className="flex flex-col">
+                        <label htmlFor="password" className="font-bold">
+                            Password:
+                        </label>
+                        <input
+                            className="border box-border border-black rounded p-1"
+                            type="password"
+                            id="password"
+                            placeholder="password123!"
+                            value={password}
+                            onChange={(e) => setPassword(e.target.value)}
+                        />
+                    </div>
                     <div className="flex flex-row justify-around">
-                        <div>
+                        <div className="flex flex-row gap-2">
                             <input
                                 type="radio"
                                 id="student"
                                 checked={!isNonProfit}
                                 onChange={() => setIsNonProfit(false)}
                             />
-                            <label htmlFor="student">Student</label>
+                            <label htmlFor="student" className="font-bold">
+                                Student
+                            </label>
                         </div>
-                        <div>
+                        <div className="flex flex-row gap-2">
                             <input
                                 type="radio"
                                 id="nonprofit"
                                 checked={isNonProfit}
                                 onChange={() => setIsNonProfit(true)}
                             />
-                            <label htmlFor="nonprofit">Non Profit</label>
+                            <label htmlFor="nonprofit" className="font-bold">
+                                Non Profit
+                            </label>
                         </div>
                     </div>
-                    <button type="submit">Submit</button>
+                    <button type="submit" className="font-bold border rounded">
+                        Submit
+                    </button>
                 </form>
             </div>
         </>

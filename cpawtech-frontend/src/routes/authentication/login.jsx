@@ -1,7 +1,7 @@
 import { object, string } from 'yup'
 import { useNavigate } from 'react-router'
 import { atom, useAtom, useSetAtom } from 'jotai'
-import { userAuthAtom } from '../../atoms/userContextAtoms'
+import { setUserAuthAtom } from '../../atoms/userContextAtoms'
 
 const usernameAtom = atom('')
 const passwordAtom = atom('')
@@ -15,7 +15,7 @@ export default function Login() {
     const [username, changeUsername] = useAtom(usernameAtom)
     const [password, changePassword] = useAtom(passwordAtom)
     const [formData] = useAtom(formDataAtom)
-    const setUser = useSetAtom(userAuthAtom)
+    const setUser = useSetAtom(setUserAuthAtom)
 
     const navigate = useNavigate()
 
@@ -57,36 +57,53 @@ export default function Login() {
 
         let jsonUser = await logedinUser.json()
 
+        console.log(jsonUser)
+
         setUser(jsonUser)
 
         navigate('/dashboard')
     }
 
+    //TODO: find a way to reuse styles. consider refactor into loop
     return (
         <>
-            <div>
-                <form className="flex flex-col w-[30vw]" action={handleSubmit}>
-                    <label htmlFor="username">Username:</label>
-                    <input
-                        className="border box-border border-black"
-                        type="text"
-                        id="username"
-                        name="username"
-                        placeholder="john.smith"
-                        value={username}
-                        onChange={(e) => changeUsername(e.target.value)}
-                    />
-                    <label htmlFor="password">Password:</label>
-                    <input
-                        className="border box-border border-black"
-                        type="password"
-                        id="password"
-                        name="password"
-                        placeholder="password123!"
-                        value={password}
-                        onChange={(e) => changePassword(e.target.value)}
-                    />
-                    <button type="submit">Submit</button>
+            <div className="flex flex-row justify-around items-center">
+                <form
+                    className="flex flex-col w-[30vw] gap-1"
+                    action={handleSubmit}
+                >
+                    <div className="flex flex-col">
+                        <label htmlFor="username" className="font-bold">
+                            Username:
+                        </label>
+                        <input
+                            className="border box-border border-black rounded p-1"
+                            type="text"
+                            id="username"
+                            name="username"
+                            placeholder="john.smith"
+                            value={username}
+                            onChange={(e) => changeUsername(e.target.value)}
+                        />
+                    </div>
+                    <div className="flex flex-col">
+                        <label htmlFor="password" className="font-bold">
+                            Password:
+                        </label>
+                        <input
+                            className="border box-border border-black rounded p-1"
+                            type="password"
+                            id="password"
+                            name="password"
+                            placeholder="password123!"
+                            value={password}
+                            onChange={(e) => changePassword(e.target.value)}
+                        />
+                    </div>
+
+                    <button type="submit" className="font-bold border rounded">
+                        Submit
+                    </button>
                 </form>
             </div>
         </>
